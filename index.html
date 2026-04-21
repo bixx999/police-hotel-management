@@ -1219,11 +1219,23 @@ const ACCOUNTS = [
 // ===== STATE =====
 let currentUser = null;
 let customers = [
-  { id: 1, name: 'شادي فايز شحادة علي حسن الدرويش', mother: 'فاطمة', nationalId: '01234567890', birthplace: 'دمشق', birthdate: '1975-03-15', militaryId: 'M001', rank: 'عقيد', jobTitle: 'ضابط', workplace: 'وزارة الداخلية', phone: '0912345678', notes: '' },
-  { id: 2, name: 'عماد محمود الصاري', mother: 'سمر', nationalId: '09876543210', birthplace: 'حمص', birthdate: '1980-07-22', militaryId: 'M002', rank: 'مقدم', jobTitle: 'ضابط', workplace: 'الأمن العام', phone: '0923456789', notes: '' },
-  { id: 3, name: 'وسيم يوسف حميدان ربيع المصري', mother: 'هدى', nationalId: '05432109876', birthplace: 'اللاذقية', birthdate: '1978-11-30', militaryId: 'M003', rank: 'رائد', jobTitle: 'ضابط', workplace: 'الشرطة العسكرية', phone: '0934567890', notes: '' },
-  { id: 4, name: 'فائز أحمد حسين إبراهيم قلوش', mother: 'نادية', nationalId: '07654321098', birthplace: 'حلب', birthdate: '1982-05-10', militaryId: 'M004', rank: 'نقيب', jobTitle: 'ضابط', workplace: 'المديرية العامة', phone: '0945678901', notes: '' },
+  { id: 1, name: 'زاهر حاج أحمد زيدان', mother: 'أمينة', nationalId: '07020074338', birthplace: 'دمشق', birthdate: '1975-03-15', militaryId: 'M001', rank: 'عميد', jobTitle: 'ضابط', workplace: 'وزارة الداخلية', phone: '0998008501', notes: '' },
+  { id: 2, name: 'مؤيد عماد الصحلي', mother: 'سحر', nationalId: '07020074338', birthplace: 'حمص', birthdate: '1980-07-22', militaryId: 'M002', rank: 'مقدم', jobTitle: 'ضابط', workplace: 'الأمن العام', phone: '0998008502', notes: '' },
+  { id: 3, name: 'محمد حاج نبيلا عمر', mother: 'بشرى', nationalId: '07020074338', birthplace: 'اللاذقية', birthdate: '1978-11-30', militaryId: 'M003', rank: 'رائد', jobTitle: 'ضابط', workplace: 'الشرطة العسكرية', phone: '0998008503', notes: '' },
+  { id: 4, name: 'علي حسن درويش', mother: 'أمل', nationalId: '07020074338', birthplace: 'حلب', birthdate: '1985-05-10', militaryId: 'M004', rank: 'نقيب', jobTitle: 'ضابط', workplace: 'الأمن العام', phone: '0998008504', notes: '' },
+  { id: 5, name: 'بلال محمد استيلة', mother: 'وسل', nationalId: '07020074338', birthplace: 'درعا', birthdate: '1982-09-18', militaryId: 'M005', rank: 'ملازم أول', jobTitle: 'ضابط', workplace: 'شرطة المرور', phone: '0998008505', notes: '' },
+  { id: 6, name: 'سامر خالد حلاق', mother: 'هند', nationalId: '07020074338', birthplace: 'دمشق', birthdate: '1983-12-25', militaryId: 'M006', rank: 'ملازم', jobTitle: 'ضابط', workplace: 'الأمن الجنائي', phone: '0998008506', notes: '' },
+  { id: 7, name: 'أحمد فواز حاتم', mother: 'فدوى', nationalId: '07020074338', birthplace: 'حماة', birthdate: '1981-08-14', militaryId: 'M007', rank: 'عقيد', jobTitle: 'ضابط', workplace: 'الأمن الدولة', phone: '0998008507', notes: '' },
+  { id: 8, name: 'عبد الرحمن أحمد الأخرس', mother: 'مها', nationalId: '07020074338', birthplace: 'إدلب', birthdate: '1984-06-30', militaryId: 'M008', rank: 'رائد', jobTitle: 'ضابط', workplace: 'الأمن السياسي', phone: '0998008508', notes: '' },
+  { id: 9, name: 'محمد عبد الرحمن حيان', mother: 'ليلي', nationalId: '07020074338', birthplace: 'ريف دمشق', birthdate: '1986-02-20', militaryId: 'M009', rank: 'عقيد', jobTitle: 'ضابط', workplace: 'المخابرات العسكرية', phone: '0998008509', notes: '' },
+  { id: 10, name: 'سياف محمد العبد الله', mother: 'دلال', nationalId: '07020074338', birthplace: 'السويداء', birthdate: '1987-04-15', militaryId: 'M010', rank: 'رائد', jobTitle: 'ضابط', workplace: 'مخابرات القوات الجوية', phone: '0998008510', notes: '' },
+  { id: 11, name: 'وسيم يوسف حميدان', mother: 'فدا', nationalId: '07020074338', birthplace: 'طرطوس', birthdate: '1989-11-08', militaryId: 'M011', rank: 'رائد', jobTitle: 'ضابط', workplace: 'مخابرات البحرية', phone: '0998008511', notes: '' },
+  { id: 12, name: 'إبراهيم إسماعيل العبد الله', mother: 'إيمان', nationalId: '07020074338', birthplace: 'دير الزور', birthdate: '1990-07-22', militaryId: 'M012', rank: 'رائد', jobTitle: 'ضابط', workplace: 'المخابرات العامة', phone: '0998008512', notes: '' },
+  { id: 13, name: 'وسيم محمد حصني سعيد', mother: 'فاطمة', nationalId: '07020074338', birthplace: 'الحسكة', birthdate: '1991-09-10', militaryId: 'M013', rank: 'رائد', jobTitle: 'ضابط', workplace: 'مخابرات الجمارك', phone: '0998008513', notes: '' },
+  { id: 14, name: 'ياسر نجم الدين شاهين', mother: 'فدا', nationalId: '07020074338', birthplace: 'الرقة', birthdate: '1992-03-28', militaryId: 'M014', rank: 'رائد', jobTitle: 'ضابط', workplace: 'أمن الحدود', phone: '0998008514', notes: '' }
 ];
+
+// ===== EXPENSES =====
 let expenses = [];
 let revenues = [];
 let bookings = [];
