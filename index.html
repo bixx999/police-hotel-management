@@ -1326,7 +1326,7 @@ function doLogin() {
     document.getElementById('topbar-avatar').textContent = account.name[0];
     document.querySelector('.user-role').textContent = account.role;
     renderRooms();
-    renderCustomers();
+    loadCustomers(); // Load from API instead of local
     renderExpenses();
     renderRevenues();
     renderBookings();
@@ -1668,6 +1668,68 @@ function saveVacantRoom() {
   showToast(`تم تسكين الغرفة ${room.num} ✓`, 'success');
 }
 
+// ===== CUSTOMERS API =====
+const API_BASE = '/api/customers';
+
+// Load customers from API
+async function loadCustomers() {
+  try {
+    const response = await fetch(API_BASE);
+    customers = await response.json();
+    renderCustomers();
+  } catch (error) {
+    console.error('Error loading customers:', error);
+    showToast('Error loading customers', 'error');
+  }
+}
+
+// Save customer to API
+async function saveCustomerToAPI(customer) {
+  try {
+    const response = await fetch(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customer)
+    });
+    const result = await response.json();
+    await loadCustomers(); // Refresh list
+    return result;
+  } catch (error) {
+    console.error('Error saving customer:', error);
+    showToast('Error saving customer', 'error');
+  }
+}
+
+// Update customer in API
+async function updateCustomerToAPI(customer) {
+  try {
+    const response = await fetch(API_BASE, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customer)
+    });
+    const result = await response.json();
+    await loadCustomers(); // Refresh list
+    return result;
+  } catch (error) {
+    console.error('Error updating customer:', error);
+    showToast('Error updating customer', 'error');
+  }
+}
+
+// Delete customer from API
+async function deleteCustomerFromAPI(id) {
+  try {
+    const response = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+    const result = await response.json();
+    await loadCustomers(); // Refresh list
+    return result;
+  } catch (error) {
+    console.error('Error deleting customer:', error);
+    showToast('Error deleting customer', 'error');
+  }
+}
+
 // ===== CUSTOMERS =====
 function renderCustomers(list = customers) {
   const tb = document.getElementById('customers-table');
@@ -1737,29 +1799,45 @@ function editCustomer(id) {
   openCustomerModal(false);
 }
 
-function saveCustomer() {
+async function saveCustomer() {
   const name = document.getElementById('c-name').value.trim();
   const mother = document.getElementById('c-mother').value.trim();
   const nationalId = document.getElementById('c-national-id').value.trim();
-  if (!name || !mother || !nationalId) { showToast('يرجى ملء الحقول المطلوبة', 'error'); return; }
+  const birthplace = document.getElementById('c-birthplace').value.trim();
+  const birthdate = document.getElementById('c-birthdate').value.trim();
+  const militaryId = document.getElementById('c-military-id').value.trim();
+  const rank = document.getElementById('c-rank').value.trim();
+  const jobTitle = document.getElementById('c-job-title').value.trim();
+  const workplace = document.getElementById('c-workplace').value.trim();
+  const phone = document.getElementById('c-phone').value.trim();
+  const notes = document.getElementById('c-notes').value.trim();
+
+  if (!name || !mother || !nationalId || !birthplace || !birthdate || !militaryId || !rank || !jobTitle || !workplace || !phone) {
+    showToast('يرجى ملء الحقول المطلوبة', 'error');
+    return;
+  }
+
   const data = {
-    name, mother, nationalId,
-    birthplace: document.getElementById('c-birthplace').value,
-    birthdate: document.getElementById('c-birthdate').value,
-    militaryId: document.getElementById('c-military-id').value,
-    rank: document.getElementById('c-rank').value,
-    jobTitle: document.getElementById('c-job-title').value,
-    workplace: document.getElementById('c-workplace').value,
-    phone: document.getElementById('c-phone').value,
-    notes: document.getElementById('c-notes').value
+    name,
+    mother,
+    nationalId,
+    birthplace,
+    birthdate,
+    militaryId,
+    rank,
+    jobTitle,
+    workplace,
+    phone,
+    notes
   };
+
   const editId = document.getElementById('edit-customer-id').value;
   if (editId) {
-    const idx = customers.findIndex(c => c.id == editId);
-    customers[idx] = { ...customers[idx], ...data };
+    data.id = parseInt(editId);
+    await updateCustomerToAPI(data);
     showToast('تم تعديل بيانات العميل بنجاح ✓', 'success');
   } else {
-    customers.push({ id: nextId++, ...data });
+    await saveCustomerToAPI(data);
     showToast('تمت إضافة العميل بنجاح ✓', 'success');
   }
   closeModal('customer-modal');
