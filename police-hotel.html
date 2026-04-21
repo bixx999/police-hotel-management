@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نادي ضباط الشرطة - نظام المحاسبة والإدارة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --primary-light: #2563a8;
+    --accent: #c8a84b;
+    --accent-light: #f0d080;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --sidebar-bg: #0f2744;
+    --sidebar-text: #cbd5e1;
+    --sidebar-active: #1e4080;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  [data-theme="dark"] {
+    --bg: #0d1b2e;
+    --surface: #1a2d45;
+    --surface2: #1e3553;
+    --border: #2a4060;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --sidebar-bg: #071526;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); transition: all 0.3s ease; min-height: 100vh; }
+
+  /* ===== LOGIN ===== */
+  #login-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2744 0%, #1a3a5c 50%, #0f2744 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  #login-page::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .login-card {
+    background: white; border-radius: 24px; padding: 50px 40px;
+    width: 420px; max-width: 95vw; position: relative; z-index: 1;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: none; } }
+  .login-logo { text-align: center; margin-bottom: 28px; }
+  .login-logo img, .login-logo .logo-icon {
+    width: 80px; height: 80px; margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-badge {
+    width: 80px; height: 80px; background: linear-gradient(135deg, #0f2744, #1a3a5c);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px; box-shadow: 0 8px 24px rgba(15,39,68,0.4);
+  }
+  .logo-badge svg { width: 44px; height: 44px; fill: #c8a84b; }
+  .login-title { font-size: 24px; font-weight: 900; color: #0f2744; margin-bottom: 4px; }
+  .login-sub { font-size: 13px; color: #64748b; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px; text-align: right; }
+  .form-control {
+    width: 100%; padding: 13px 16px; border: 2px solid #e5e7eb; border-radius: 10px;
+    font-family: 'Cairo', sans-serif; font-size: 14px; color: #1e293b;
+    background: #f9fafb; transition: all 0.2s; text-align: right; direction: rtl;
+  }
+  .form-control:focus { outline: none; border-color: #1a3a5c; background: white; box-shadow: 0 0 0 3px rgba(26,58,92,0.1); }
+  .login-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 13px; }
+  .checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #374151; }
+  .checkbox-label input { accent-color: #1a3a5c; }
+  .forgot-link { color: #2563a8; text-decoration: none; font-weight: 600; }
+  .btn-login {
+    width: 100%; padding: 15px; background: linear-gradient(135deg, #1a3a5c, #2563a8);
+    color: white; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif;
+    font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(26,58,92,0.4);
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,58,92,0.5); }
+  .login-footer { text-align: center; margin-top: 24px; font-size: 12px; color: #9ca3af; }
+  .error-msg { color: #ef4444; font-size: 13px; text-align: center; margin-top: 12px; display: none; }
+
+  /* ===== APP ===== */
+  #app { display: none; flex-direction: row; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px; background: var(--sidebar-bg); color: var(--sidebar-text);
+    display: flex; flex-direction: column; position: fixed; top: 0; right: 0;
+    bottom: 0; z-index: 100; transition: all 0.3s;
+  }
+  .sidebar-logo {
+    padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sidebar-logo-icon {
+    width: 42px; height: 42px; background: linear-gradient(135deg, #c8a84b, #f0d080);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .sidebar-logo-icon svg { width: 22px; height: 22px; fill: #0f2744; }
+  .sidebar-logo-text { font-size: 13px; font-weight: 700; color: white; line-height: 1.4; }
+  .sidebar-logo-sub { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 400; }
+  .sidebar-nav { padding: 16px 12px; flex: 1; }
+  .nav-section { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); padding: 12px 8px 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+    border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 4px;
+    font-size: 14px; color: var(--sidebar-text); font-weight: 500;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+  .nav-item.active { background: var(--primary-light); color: white; box-shadow: 0 4px 12px rgba(37,99,168,0.4); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Topbar */
+  .main-content { margin-right: 240px; display: flex; flex-direction: column; min-height: 100vh; width: calc(100% - 240px); }
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-title { font-size: 18px; font-weight: 700; color: var(--text); }
+  .user-menu { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px; cursor: pointer; transition: background 0.2s; }
+  .user-menu:hover { background: var(--bg); }
+  .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #1a3a5c, #2563a8); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; }
+  .user-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .user-role { font-size: 11px; color: var(--text-muted); }
+  .theme-toggle {
+    width: 44px; height: 24px; background: var(--border); border-radius: 12px;
+    position: relative; cursor: pointer; transition: background 0.3s; border: none;
+  }
+  .theme-toggle.active { background: var(--accent); }
+  .theme-toggle::after {
+    content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+    background: white; border-radius: 50%; transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .theme-toggle.active::after { transform: translateX(-20px); }
+  .logout-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+  .logout-btn:hover { background: #ef4444; color: white; }
+
+  /* Pages */
+  .page { display: none; padding: 28px; flex: 1; }
+  .page.active { display: block; }
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-size: 26px; font-weight: 900; color: var(--text); }
+  .page-header p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Cards */
+  .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--surface); border-radius: var(--radius); padding: 20px;
+    display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow);
+    border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .stat-icon svg { width: 24px; height: 24px; }
+  .stat-value { font-size: 22px; font-weight: 900; }
+  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+  /* Quick Access */
+  .quick-access { background: var(--surface); border-radius: var(--radius); padding: 22px; margin-bottom: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .quick-access h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+  .quick-btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px;
+    background: linear-gradient(135deg, #e0f5ef, #d1fae5); color: #059669;
+    border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1px solid #a7f3d0;
+    transition: all 0.2s;
+  }
+  .quick-btn:hover { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+
+  /* Summary Grids */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .summary-card { background: var(--surface); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .summary-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row span:first-child { color: var(--text-muted); font-size: 14px; }
+  .summary-row span:last-child { font-weight: 700; font-size: 15px; }
+  .profit-card { background: var(--surface); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .profit-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+
+  /* Hotel Tabs */
+  .tabs { display: flex; gap: 0; background: var(--surface); border-radius: var(--radius); padding: 6px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .tab-btn {
+    flex: 1; padding: 11px; border-radius: 10px; border: none; background: transparent;
+    font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer;
+    color: var(--text-muted); transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(26,58,92,0.3); }
+
+  /* Room Stats */
+  .room-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .room-stat { border-radius: var(--radius); padding: 24px; text-align: center; }
+  .room-stat.vacant { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 2px solid #6ee7b7; }
+  .room-stat.occupied { background: linear-gradient(135deg, #fee2e2, #fecaca); border: 2px solid #fca5a5; }
+  .room-stat.total { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border: 2px solid #93c5fd; }
+  .room-stat-num { font-size: 36px; font-weight: 900; }
+  .room-stat.vacant .room-stat-num { color: #059669; }
+  .room-stat.occupied .room-stat-num { color: #ef4444; }
+  .room-stat.total .room-stat-num { color: #2563eb; }
+  .room-stat-label { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 4px; }
+
+  /* Rooms Grid */
+  .rooms-filter { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; justify-content: flex-end; }
+  .select-filter { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; }
+  .rooms-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+  .room-card {
+    border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer;
+    transition: all 0.2s; border: 2px solid transparent; position: relative;
+  }
+  .room-card.vacant { background: #f0fdf4; border-color: #86efac; }
+  .room-card.occupied { background: #fef2f2; border-color: #fca5a5; }
+  .room-card.suite { background: #f5f3ff; border-color: #c4b5fd; }
+  .room-card.vip { background: #fffbeb; border-color: #fcd34d; }
+  .room-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .room-num { font-size: 16px; font-weight: 700; color: var(--text); }
+  .room-status { font-size: 11px; font-weight: 600; margin-top: 2px; }
+  .room-card.vacant .room-status { color: #059669; }
+  .room-card.occupied .room-status { color: #ef4444; }
+  .room-card.suite .room-status { color: #7c3aed; }
+  .room-card.vip .room-status { color: #d97706; }
+  .room-guest { font-size: 10px; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }
+  .badge-suite, .badge-vip {
+    position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 700;
+    padding: 2px 5px; border-radius: 4px;
+  }
+  .badge-suite { background: #7c3aed; color: white; }
+  .badge-vip { background: #d97706; color: white; }
+
+  /* Tab content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Customers */
+  .customers-toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; justify-content: space-between; }
+  .search-box { position: relative; flex: 1; max-width: 360px; }
+  .search-box input { width: 100%; padding: 10px 40px 10px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font-family: 'Cairo', sans-serif; font-size: 14px; }
+  .search-box input:focus { outline: none; border-color: var(--primary); }
+  .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white;
+    border: none; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 14px;
+    font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(26,58,92,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,58,92,0.4); }
+  .table-wrapper { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--sidebar-bg); }
+  thead th { padding: 14px 18px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); text-align: right; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 14px 18px; font-size: 13px; color: var(--text); }
+  .action-btns { display: flex; gap: 6px; }
+  .btn-edit, .btn-delete {
+    padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer;
+    font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: 600; transition: all 0.2s;
+  }
+  .btn-edit { background: #dbeafe; color: #2563eb; }
+  .btn-edit:hover { background: #2563eb; color: white; }
+  .btn-delete { background: #fee2e2; color: #ef4444; }
+  .btn-delete:hover { background: #ef4444; color: white; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--surface); border-radius: 20px; width: 540px; max-width: 95vw;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    transform: translateY(20px) scale(0.97); transition: all 0.3s;
+  }
+  .modal-overlay.active .modal { transform: none; }
+  .modal-header {
+    padding: 24px 28px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--surface); border-radius: 20px 20px 0 0; z-index: 1;
+  }
+  .modal-header h2 { font-size: 18px; font-weight: 800; color: var(--text); }
+  .modal-close { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-muted); transition: all 0.2s; }
+  .modal-close:hover { background: #fee2e2; color: #ef4444; border-color: #fecaca; }
+  .modal-body { padding: 24px 28px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-field { margin-bottom: 16px; }
+  .form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 7px; }
+  .form-field input, .form-field textarea, .form-field select {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; font-size: 14px; transition: all 0.2s;
+  }
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus { outline: none; border-color: var(--primary); background: var(--surface); }
+  .form-field textarea { resize: vertical; min-height: 70px; }
+  .required { color: #ef4444; }
+  .modal-footer { padding: 18px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; }
+  .btn-cancel { padding: 10px 22px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface2); color: var(--text-muted); font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-cancel:hover { background: var(--border); }
+  .btn-save { padding: 10px 24px; border: none; border-radius: 9px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn-save:hover { box-shadow: 0 6px 18px rgba(26,58,92,0.4); transform: translateY(-1px); }
+
+  /* Confirm Modal */
+  .confirm-modal { width: 380px; }
+  .confirm-icon { width: 64px; height: 64px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; }
+  .confirm-modal .modal-body { text-align: center; }
+  .confirm-modal h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .confirm-modal p { color: var(--text-muted); font-size: 14px; }
+
+  /* Revenues/Expenses tab */
+  .rev-toolbar { display: flex; gap: 10px; margin-bottom: 18px; align-items: center; justify-content: space-between; }
+  .total-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 10px; font-size: 14px; font-weight: 700; }
+  .total-income { background: #d1fae5; color: #059669; }
+  .total-expense { background: #fee2e2; color: #ef4444; }
+
+  /* Bookings tab */
+  .booking-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+  }
+  .booking-badge.confirmed { background: #d1fae5; color: #059669; }
+  .booking-badge.pending { background: #fef3c7; color: #d97706; }
+  .booking-badge.cancelled { background: #fee2e2; color: #ef4444; }
+  .booking-badge.checkin { background: #dbeafe; color: #2563eb; }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .page.active { animation: fadeIn 0.3s ease; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Responsive tweaks */
+  @media (max-width: 1100px) {
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .rooms-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .sidebar { width: 60px; }
+    .main-content { margin-right: 60px; width: calc(100% - 60px); }
+    .sidebar-logo-text, .nav-item span { display: none; }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 24px; background: #1e293b; color: white;
+    padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 999;
+    transform: translateY(20px); opacity: 0; transition: all 0.3s; pointer-events: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toast.show { transform: none; opacity: 1; }
+  .toast.success { background: #059669; }
+  .toast.error { background: #ef4444; }
+
+  /* No results */
+  .no-results { text-align: center; padding: 40px; color: var(--text-muted); font-size: 15px; }
+  .no-results span { display: block; font-size: 40px; margin-bottom: 12px; }
+
+  /* ===== ROOM DETAIL MODAL ===== */
+  .room-modal { width: 600px; }
+  .room-modal-header {
+    padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); border-radius: 20px 20px 0 0; z-index: 2;
+  }
+  .room-modal-header-right { display: flex; align-items: center; gap: 12px; }
+  .room-num-badge { font-size: 18px; font-weight: 900; color: var(--text); }
+  .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .status-pill.occupied { background: #fee2e2; color: #ef4444; }
+  .status-pill.vacant { background: #d1fae5; color: #059669; }
+  .status-pill.suite { background: #f5f3ff; color: #7c3aed; }
+  .status-pill.vip { background: #fffbeb; color: #d97706; }
+
+  /* Guest card */
+  .guest-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 14px; overflow: hidden; }
+  .guest-card-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .bed-badge { background: var(--primary); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+  .guest-card-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .guest-card-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .guest-detail-row { padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .guest-detail-row:last-child { border-bottom: none; }
+  .gd-label { font-size: 12px; color: var(--text-muted); }
+  .gd-val { font-size: 13px; font-weight: 600; color: var(--text); }
+  .guest-checkout-info { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; background: #f0fdf4; }
+  .checkout-open { font-size: 12px; color: #059669; font-weight: 600; }
+  .pay-badge { padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pay-pending { background: #fef3c7; color: #d97706; }
+  .pay-military { background: #dbeafe; color: #2563eb; }
+  .pay-immediate { background: #d1fae5; color: #059669; }
+  .btn-evict { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: 600; background: #d1fae5; color: #059669; transition: all 0.2s; }
+  .btn-evict:hover { background: #059669; color: white; }
+
+  /* Services section */
+  .services-section { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 6px; }
+  .services-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .services-header h4 { font-size: 14px; font-weight: 700; }
+  .btn-add-service { font-size: 12px; font-weight: 700; color: var(--primary-light); background: none; border: none; cursor: pointer; }
+  .service-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .service-row:last-child { border-bottom: none; }
+  .total-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 15px; font-weight: 700; }
+  .total-amount { font-size: 20px; color: var(--primary); font-weight: 900; }
+  .btn-settle { width: 100%; margin-top: 14px; padding: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn-settle:hover { box-shadow: 0 6px 18px rgba(245,158,11,0.4); transform: translateY(-1px); }
+
+  /* ===== VACANT ROOM MODAL ===== */
+  .vacant-modal { width: 580px; }
+  .vacant-form-title { background: linear-gradient(135deg, #e0f5ef, #d1fae5); border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; font-size: 15px; font-weight: 700; color: #059669; border: 1px solid #a7f3d0; }
+  .toggle-group { display: flex; gap: 0; background: var(--bg); border-radius: 10px; padding: 4px; margin-top: 6px; }
+  .toggle-btn { flex: 1; padding: 9px; border: none; background: transparent; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: all 0.2s; }
+  .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(26,58,92,0.3); }
+  .form-section-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .btn-checkin { width: 100%; padding: 14px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 6px; }
+  .btn-checkin:hover { box-shadow: 0 6px 18px rgba(5,150,105,0.4); transform: translateY(-1px); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-badge">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 4 L20 12 L8 8 L12 22 L4 32 L12 42 L8 56 L20 52 L32 60 L44 52 L56 56 L52 42 L60 32 L52 22 L56 8 L44 12 Z" opacity="0.3"/>
+          <path d="M32 10 L22 17 L12 14 L16 25 L8 32 L16 39 L12 50 L22 47 L32 54 L42 47 L52 50 L48 39 L56 32 L48 25 L52 14 L42 17 Z" opacity="0.5"/>
+          <path d="M32 16 C23 16 16 23 16 32 C16 41 23 48 32 48 C41 48 48 41 48 32 C48 23 41 16 32 16 Z"/>
+          <path d="M32 20 L34 27 L41 27 L36 32 L38 39 L32 35 L26 39 L28 32 L23 27 L30 27 Z" fill="#c8a84b"/>
+        </svg>
+      </div>
+      <div class="login-title">نادي ضباط الشرطة</div>
+      <div class="login-sub">نظام المحاسبة والإدارة</div>
+    </div>
+    <div class="form-group">
+      <label>البريد الإلكتروني أو اسم المستخدم</label>
+      <input type="text" class="form-control" id="login-email" placeholder="أدخل البريد الإلكتروني" />
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <input type="password" class="form-control" id="login-pass" placeholder="••••••••" />
+    </div>
+    <div class="login-options">
+      <label class="checkbox-label"><input type="checkbox" /> تذكرني</label>
+      <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
+    </div>
+    <button class="btn-login" onclick="doLogin()">تسجيل الدخول</button>
+    <div class="error-msg" id="login-error">البريد الإلكتروني أو كلمة المرور غير صحيحة</div>
+    <div class="login-footer">Powered by Bashar Salh</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg viewBox="0 0 64 64"><path d="M32 8 L24 14 L14 11 L17 22 L8 32 L17 42 L14 53 L24 50 L32 56 L40 50 L50 53 L47 42 L56 32 L47 22 L50 11 L40 14 Z" fill="currentColor" opacity="0.7"/><circle cx="32" cy="32" r="10" fill="currentColor"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">نادي الضباط</div>
+        <div class="sidebar-logo-sub">بدمشق</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">القائمة الرئيسية</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>لوحة التحكم</span>
+      </div>
+      <div class="nav-section">الإدارة</div>
+      <div class="nav-item" onclick="showPage('hotel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>الفندق</span>
+      </div>
+      <div class="nav-item" onclick="showPage('customers')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>العملاء</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main -->
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-right">
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()"></button>
+        <div style="font-size:12px;color:var(--text-muted);">الوضع الليلي</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="user-menu">
+          <div>
+            <div class="user-name" id="topbar-user">رنيم عجان</div>
+            <div class="user-role">قسم الفندق</div>
+          </div>
+          <div class="user-avatar" id="topbar-avatar">ر</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          خروج
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>لوحة التحكم</h1>
+        <p>نظام محاسبة نادي ضباط الشرطة</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#dbeafe;"><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><div class="stat-value" style="color:#2563eb;">41 <span style="font-size:14px;color:#64748b;">| 20</span></div><div class="stat-label">غرف شاغرة | مشغولة</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fef3c7;"><svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><div class="stat-value" style="color:#d97706;">0</div><div class="stat-label">ديون مستحقة فائرة</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#d1fae5;"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div><div class="stat-value" style="color:#059669;">0 <span style="font-size:12px;">ل.س</span></div><div class="stat-label">رصيد الصندوق</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#d1fae5;"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div><div class="stat-value" style="color:#059669;">0 <span style="font-size:12px;">ل.س</span></div><div class="stat-label">إيرادات اليوم</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fee2e2;"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><div class="stat-value" style="color:#ef4444;">0 <span style="font-size:12px;">ل.س</span></div><div class="stat-label">مصاريف اليوم</div></div>
+        </div>
+      </div>
+      <div class="quick-access">
+        <h3>وصول سريع</h3>
+        <div class="quick-btn" onclick="showPage('hotel')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          غرف الفندق
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h3><span style="color:#059669;font-size:10px;">●</span> ملخص الإيرادات</h3>
+          <div class="summary-row"><span>اليوم</span><span style="color:#059669;">0 ل.س</span></div>
+          <div class="summary-row"><span>هذا الأسبوع</span><span style="color:#059669;">0 ل.س</span></div>
+          <div class="summary-row"><span>هذا الشهر</span><span style="color:#059669;">0 ل.س</span></div>
+        </div>
+        <div class="summary-card">
+          <h3><span style="color:#ef4444;font-size:10px;">●</span> ملخص المصاريف</h3>
+          <div class="summary-row"><span>اليوم</span><span style="color:#ef4444;">0 ل.س</span></div>
+          <div class="summary-row"><span>هذا الأسبوع</span><span style="color:#ef4444;">0 ل.س</span></div>
+          <div class="summary-row"><span>هذا الشهر</span><span style="color:#ef4444;">0 ل.س</span></div>
+        </div>
+      </div>
+      <div class="profit-card">
+        <h3>صافي الربح الشهري</h3>
+        <div class="summary-row"><span>الإيرادات</span><span style="color:#059669;">0 ل.س</span></div>
+        <div class="summary-row"><span>المصاريف</span><span style="color:#ef4444;">- 0 ل.س</span></div>
+        <div class="summary-row"><span style="font-weight:700;">الصافي</span><span style="color:#2563eb;font-size:18px;font-weight:900;">0 ل.س</span></div>
+      </div>
+    </div>
+
+    <!-- HOTEL -->
+    <div class="page" id="page-hotel">
+      <div class="page-header">
+        <h1>الفندق</h1>
+        <p>إدارة مصاريف وإيرادات وغرف وحجوزات الفندق</p>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('occupied')">الغرف المشغولة</button>
+        <button class="tab-btn" onclick="switchTab('expenses')">المصاريف</button>
+        <button class="tab-btn" onclick="switchTab('revenues')">الإيرادات</button>
+        <button class="tab-btn" onclick="switchTab('bookings')">الحجوزات</button>
+      </div>
+
+      <!-- Occupied Rooms -->
+      <div class="tab-content active" id="tab-occupied">
+        <div class="room-stats">
+          <div class="room-stat vacant"><div class="room-stat-num" id="vacant-count">41</div><div class="room-stat-label">شاغرة</div></div>
+          <div class="room-stat occupied"><div class="room-stat-num" id="occupied-count">20</div><div class="room-stat-label">مشغولة</div></div>
+          <div class="room-stat total"><div class="room-stat-num">61</div><div class="room-stat-label">إجمالي الغرف</div></div>
+        </div>
+        <div class="rooms-filter">
+          <select class="select-filter" onchange="filterRooms(this.value)">
+            <option value="all">الكل</option>
+            <option value="vacant">شاغرة</option>
+            <option value="occupied">مشغولة</option>
+            <option value="suite">سويت</option>
+            <option value="vip">VIP</option>
+          </select>
+          <select class="select-filter">
+            <option>كل الطوابق</option>
+            <option>الطابق الأول</option>
+            <option>الطابق الثاني</option>
+            <option>الطابق الثالث</option>
+          </select>
+        </div>
+        <div class="rooms-grid" id="rooms-grid"></div>
+      </div>
+
+      <!-- Expenses -->
+      <div class="tab-content" id="tab-expenses">
+        <div class="rev-toolbar">
+          <div class="total-badge total-expense">إجمالي المصاريف: <span id="total-exp">0</span> ل.س</div>
+          <button class="btn-primary" onclick="openExpenseModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة مصروف
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>التاريخ</th><th>الوصف</th><th>المبلغ (ل.س)</th><th>الفئة</th><th>إجراءات</th></tr></thead>
+            <tbody id="expense-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Revenues -->
+      <div class="tab-content" id="tab-revenues">
+        <div class="rev-toolbar">
+          <div class="total-badge total-income">إجمالي الإيرادات: <span id="total-rev">0</span> ل.س</div>
+          <button class="btn-primary" onclick="openRevenueModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة إيراد
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>التاريخ</th><th>الوصف</th><th>المبلغ (ل.س)</th><th>الغرفة</th><th>إجراءات</th></tr></thead>
+            <tbody id="revenue-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bookings -->
+      <div class="tab-content" id="tab-bookings">
+        <div class="rev-toolbar">
+          <div></div>
+          <button class="btn-primary" onclick="openBookingModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة حجز
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>العميل</th><th>الغرفة</th><th>تاريخ الوصول</th><th>تاريخ المغادرة</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="bookings-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="page" id="page-customers">
+      <div class="page-header">
+        <h1>العملاء</h1>
+        <p>إدارة قاعدة بيانات العملاء والضباط</p>
+      </div>
+      <div class="customers-toolbar">
+        <button class="btn-primary" onclick="openCustomerModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          إضافة عميل جديد
+        </button>
+        <div class="search-box">
+          <input type="text" placeholder="بحث عن عميل..." id="search-input" oninput="searchCustomers()" />
+          <span class="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم الثلاثي</th>
+              <th>اسم الأم</th>
+              <th>الرقم الوطني</th>
+              <th>الرتبة</th>
+              <th>رقم الهاتف</th>
+              <th>مكان الولادة</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="customers-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER MODAL -->
+<div class="modal-overlay" id="customer-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="customer-modal-title">إضافة عميل جديد</h2>
+      <button class="modal-close" onclick="closeModal('customer-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-customer-id" />
+      <div class="form-row">
+        <div class="form-field">
+          <label>الاسم الثلاثي <span class="required">*</span></label>
+          <input type="text" id="c-name" placeholder="الاسم الأول والثاني والثالث" />
+        </div>
+        <div class="form-field">
+          <label>اسم الأم <span class="required">*</span></label>
+          <input type="text" id="c-mother" placeholder="اسم الأم" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الرقم الوطني <span class="required">*</span></label>
+          <input type="text" id="c-national-id" placeholder="الرقم الوطني" />
+        </div>
+        <div class="form-field">
+          <label>مكان الولادة <span class="required">*</span></label>
+          <input type="text" id="c-birthplace" placeholder="المدينة / المنطقة" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>تاريخ الولادة <span class="required">*</span></label>
+          <input type="date" id="c-birthdate" />
+        </div>
+        <div class="form-field">
+          <label>الرقم العسكري</label>
+          <input type="text" id="c-military-id" placeholder="الرقم العسكري" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الرتبة</label>
+          <select id="c-rank">
+            <option value="">اختر الرتبة</option>
+            <option>عميد</option>
+            <option>عقيد</option>
+            <option>مقدم</option>
+            <option>رائد</option>
+            <option>نقيب</option>
+            <option>ملازم أول</option>
+            <option>ملازم</option>
+            <option>مدني</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>الصفة الوظيفية</label>
+          <input type="text" id="c-job-title" placeholder="الصفة الوظيفية" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>مكان العمل</label>
+          <input type="text" id="c-workplace" placeholder="الجهة / المديرية" />
+        </div>
+        <div class="form-field">
+          <label>رقم الهاتف</label>
+          <input type="text" id="c-phone" placeholder="09xxxxxxxx" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>ملاحظات</label>
+        <textarea id="c-notes" placeholder="أي ملاحظات إضافية..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('customer-modal')">إلغاء</button>
+      <button class="btn-save" onclick="saveCustomer()">حفظ العميل</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="modal-overlay" id="expense-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="expense-modal-title">إضافة مصروف جديد</h2>
+      <button class="modal-close" onclick="closeModal('expense-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-expense-id" />
+      <div class="form-row">
+        <div class="form-field">
+          <label>التاريخ <span class="required">*</span></label>
+          <input type="date" id="e-date" />
+        </div>
+        <div class="form-field">
+          <label>المبلغ (ل.س) <span class="required">*</span></label>
+          <input type="number" id="e-amount" placeholder="0" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>الوصف <span class="required">*</span></label>
+        <input type="text" id="e-desc" placeholder="وصف المصروف" />
+      </div>
+      <div class="form-field">
+        <label>الفئة</label>
+        <select id="e-category">
+          <option>صيانة</option>
+          <option>خدمات</option>
+          <option>رواتب</option>
+          <option>مستلزمات</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('expense-modal')">إلغاء</button>
+      <button class="btn-save" onclick="saveExpense()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVENUE MODAL -->
+<div class="modal-overlay" id="revenue-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="revenue-modal-title">إضافة إيراد جديد</h2>
+      <button class="modal-close" onclick="closeModal('revenue-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-revenue-id" />
+      <div class="form-row">
+        <div class="form-field">
+          <label>التاريخ <span class="required">*</span></label>
+          <input type="date" id="r-date" />
+        </div>
+        <div class="form-field">
+          <label>المبلغ (ل.س) <span class="required">*</span></label>
+          <input type="number" id="r-amount" placeholder="0" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>الوصف <span class="required">*</span></label>
+        <input type="text" id="r-desc" placeholder="وصف الإيراد" />
+      </div>
+      <div class="form-field">
+        <label>رقم الغرفة</label>
+        <input type="text" id="r-room" placeholder="رقم الغرفة (اختياري)" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('revenue-modal')">إلغاء</button>
+      <button class="btn-save" onclick="saveRevenue()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>إضافة حجز جديد</h2>
+      <button class="modal-close" onclick="closeModal('booking-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-booking-id" />
+      <div class="form-field">
+        <label>اسم العميل <span class="required">*</span></label>
+        <input type="text" id="b-guest" placeholder="الاسم الكامل" />
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>رقم الغرفة <span class="required">*</span></label>
+          <input type="text" id="b-room" placeholder="رقم الغرفة" />
+        </div>
+        <div class="form-field">
+          <label>الحالة</label>
+          <select id="b-status">
+            <option value="confirmed">مؤكد</option>
+            <option value="pending">قيد الانتظار</option>
+            <option value="checkin">تسجيل وصول</option>
+            <option value="cancelled">ملغي</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>تاريخ الوصول <span class="required">*</span></label>
+          <input type="date" id="b-checkin" />
+        </div>
+        <div class="form-field">
+          <label>تاريخ المغادرة <span class="required">*</span></label>
+          <input type="date" id="b-checkout" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('booking-modal')">إلغاء</button>
+      <button class="btn-save" onclick="saveBooking()">حفظ الحجز</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal confirm-modal">
+    <div class="modal-body" style="padding:32px 28px;">
+      <div class="confirm-icon">🗑️</div>
+      <h3>تأكيد الحذف</h3>
+      <p>هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:24px;">
+        <button class="btn-cancel" onclick="closeModal('confirm-modal')">إلغاء</button>
+        <button class="btn-save" style="background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="confirmDelete()">حذف</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM DETAIL MODAL (Occupied) -->
+<div class="modal-overlay" id="room-detail-modal">
+  <div class="modal room-modal">
+    <div class="room-modal-header">
+      <div class="room-modal-header-right">
+        <button class="modal-close" onclick="closeModal('room-detail-modal')">✕</button>
+        <span class="room-num-badge">غرفة <span id="rd-room-num"></span></span>
+        <span class="status-pill occupied">مشغولة</span>
+      </div>
+      <span style="font-size:13px;color:var(--text-muted);" id="rd-room-cat"></span>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <div id="rd-guests-container"></div>
+      <div class="services-section">
+        <div class="services-header">
+          <h4>خدمات النزيل</h4>
+          <button class="btn-add-service">+ إضافة خدمة</button>
+        </div>
+        <div id="rd-service-list"></div>
+        <div class="total-row">
+          <span>الإجمالي</span>
+          <span class="total-amount"><span id="rd-total">0</span> ل.س</span>
+        </div>
+        <button class="btn-settle" id="rd-settle-btn" onclick="settleRoom()">تسوية الحساب</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT GUEST MODAL (inside occupied room) -->
+<div class="modal-overlay" id="edit-guest-modal">
+  <div class="modal" style="width:540px;">
+    <div class="modal-header">
+      <h2 id="eg-modal-title">تعديل بيانات النزيل</h2>
+      <button class="modal-close" onclick="closeModal('edit-guest-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="eg-guest-id" />
+      <div class="form-field">
+        <label>الاسم <span class="required">*</span></label>
+        <input type="text" id="eg-name" placeholder="الاسم الكامل" />
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>اسم الأم</label>
+          <input type="text" id="eg-mother" />
+        </div>
+        <div class="form-field">
+          <label>الرقم الوطني</label>
+          <input type="text" id="eg-national-id" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>مكان الولادة</label>
+          <input type="text" id="eg-birthplace" />
+        </div>
+        <div class="form-field">
+          <label>تاريخ الولادة</label>
+          <input type="date" id="eg-birthdate" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الرقم العسكري</label>
+          <input type="text" id="eg-military-id" />
+        </div>
+        <div class="form-field">
+          <label>الرتبة</label>
+          <select id="eg-rank">
+            <option value="">اختر</option>
+            <option>عميد</option><option>عقيد</option><option>مقدم</option>
+            <option>رائد</option><option>نقيب</option><option>ملازم أول</option>
+            <option>ملازم</option><option>مدني</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الوظيفة</label>
+          <input type="text" id="eg-job-title" />
+        </div>
+        <div class="form-field">
+          <label>مكان العمل</label>
+          <input type="text" id="eg-workplace" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الهاتف</label>
+          <input type="text" id="eg-phone" />
+        </div>
+        <div class="form-field">
+          <label>تاريخ الدخول</label>
+          <input type="date" id="eg-checkin" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>نوع الإقامة</label>
+          <select id="eg-checkout-type" onchange="toggleEgCheckout(this.value)">
+            <option value="open">خروج مفتوح</option>
+            <option value="fixed">خروج محدد</option>
+          </select>
+        </div>
+        <div class="form-field" id="eg-checkout-date-wrap" style="display:none;">
+          <label>تاريخ الخروج</label>
+          <input type="date" id="eg-checkout-date" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>سعر اليوم (ل.س) <span class="required">*</span></label>
+        <input type="number" id="eg-daily-rate" placeholder="250" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('edit-guest-modal')">إلغاء</button>
+      <button class="btn-save" onclick="saveEditGuest()">حفظ التعديلات</button>
+    </div>
+  </div>
+</div>
+
+<!-- VACANT ROOM MODAL -->
+<div class="modal-overlay" id="vacant-room-modal">
+  <div class="modal vacant-modal">
+    <div class="room-modal-header">
+      <div class="room-modal-header-right">
+        <button class="modal-close" onclick="closeModal('vacant-room-modal')">✕</button>
+        <span class="room-num-badge">غرفة <span id="vr-room-num"></span></span>
+        <span class="status-pill vacant" id="vr-room-status">شاغرة</span>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <div class="vacant-form-title">تسكين نزيل جديد</div>
+
+      <div class="form-field">
+        <label>الاسم الثلاثي <span class="required">*</span></label>
+        <input type="text" id="vr-guest-name" placeholder="ابحث عن نزيل أو أدخل اسم جديد" />
+      </div>
+
+      <div class="form-field">
+        <label>نوع التسكين <span class="required">*</span></label>
+        <div class="toggle-group" id="vr-type-group">
+          <button class="toggle-btn active" data-value="military" onclick="handleToggle('vr-type-group','military','vr-type')">عسكري</button>
+          <button class="toggle-btn" data-value="civil" onclick="handleToggle('vr-type-group','civil','vr-type')">مدني</button>
+        </div>
+        <input type="hidden" id="vr-type" value="military" />
+      </div>
+
+      <div class="form-field">
+        <label>نوع الإشغال <span class="required">*</span></label>
+        <div class="toggle-group" id="vr-occupancy-group">
+          <button class="toggle-btn active" data-value="full" onclick="handleToggle('vr-occupancy-group','full','vr-occupancy')">غرفة كاملة</button>
+          <button class="toggle-btn" data-value="single" onclick="handleToggle('vr-occupancy-group','single','vr-occupancy')">سرير واحد</button>
+        </div>
+        <input type="hidden" id="vr-occupancy" value="full" />
+      </div>
+
+      <div class="form-field">
+        <label>نوع الإقامة <span class="required">*</span></label>
+        <div class="toggle-group" id="vr-stay-group">
+          <button class="toggle-btn active" data-value="fixed" onclick="handleToggle('vr-stay-group','fixed','vr-stay-type')">خروج محدد</button>
+          <button class="toggle-btn" data-value="open" onclick="handleToggle('vr-stay-group','open','vr-stay-type')">خروج مفتوح</button>
+        </div>
+        <input type="hidden" id="vr-stay-type" value="fixed" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>تاريخ الدخول <span class="required">*</span></label>
+          <input type="date" id="vr-checkin" />
+        </div>
+        <div class="form-field">
+          <label>تاريخ الخروج</label>
+          <input type="date" id="vr-checkout" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>العملة</label>
+          <select id="vr-currency">
+            <option>ل.س - ليرة سورية</option>
+            <option>دولار أمريكي</option>
+            <option>يورو</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>سعر الإيجار (ل.س) <span class="required">*</span></label>
+          <input type="number" id="vr-daily-rate" placeholder="أدخل السعر" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>نوع الدفع <span class="required">*</span></label>
+        <div class="toggle-group" id="vr-payment-group">
+          <button class="toggle-btn active" data-value="مطالبة" onclick="handleToggle('vr-payment-group','مطالبة','vr-payment-type')">مطالبة</button>
+          <button class="toggle-btn" data-value="عند الخروج" onclick="handleToggle('vr-payment-group','عند الخروج','vr-payment-type')">عند الخروج</button>
+          <button class="toggle-btn" data-value="دفع فوري" onclick="handleToggle('vr-payment-group','دفع فوري','vr-payment-type')">دفع فوري</button>
+        </div>
+        <input type="hidden" id="vr-payment-type" value="مطالبة" />
+      </div>
+
+      <div class="form-field" id="vr-destination-wrap">
+        <label>وجهة المطالبة <span class="required">*</span></label>
+        <select id="vr-destination">
+          <option value="">اختر الجهة...</option>
+          <option>نادي الاتحاد الرياضي</option>
+          <option>وزارة الداخلية</option>
+          <option>الأمن العام</option>
+          <option>الشرطة العسكرية</option>
+          <option>المديرية العامة</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+
+      <div class="form-section-title">البيانات الشخصية</div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>اسم الأم <span class="required">*</span></label>
+          <input type="text" id="vr-mother" />
+        </div>
+        <div class="form-field">
+          <label>الرقم الوطني <span class="required">*</span></label>
+          <input type="text" id="vr-national-id" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>مكان الولادة <span class="required">*</span></label>
+          <input type="text" id="vr-birthplace" />
+        </div>
+        <div class="form-field">
+          <label>تاريخ الولادة <span class="required">*</span></label>
+          <input type="date" id="vr-birthdate" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الرقم العسكري</label>
+          <input type="text" id="vr-military-id" />
+        </div>
+        <div class="form-field">
+          <label>الرتبة</label>
+          <select id="vr-rank">
+            <option value="">اختر</option>
+            <option>عميد</option><option>عقيد</option><option>مقدم</option>
+            <option>رائد</option><option>نقيب</option><option>ملازم أول</option>
+            <option>ملازم</option><option>مدني</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>الصفة الوظيفية</label>
+          <input type="text" id="vr-job-title" />
+        </div>
+        <div class="form-field">
+          <label>مكان العمل</label>
+          <input type="text" id="vr-workplace" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>رقم الهاتف</label>
+          <input type="text" id="vr-phone" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>ملاحظات</label>
+        <textarea id="vr-notes" rows="2" placeholder="أي ملاحظات..."></textarea>
+      </div>
+
+      <button class="btn-checkin" onclick="saveVacantRoom()">تسكين الغرفة</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== ACCOUNTS =====
+const ACCOUNTS = [
+  { email: 'admin@police-club.sy', pass: 'Admin@2024', name: 'مدير النظام', role: 'مدير' },
+  { email: 'ranem@police-club.sy', pass: 'Ranem@2024', name: 'رنيم عجان', role: 'قسم الفندق' },
+  { email: 'ahmad@police-club.sy', pass: 'Ahmad@2024', name: 'أحمد السيد', role: 'المحاسبة' },
+  { email: 'sara@police-club.sy', pass: 'Sara@2024', name: 'سارة المصري', role: 'الاستقبال' },
+  { email: 'khalid@police-club.sy', pass: 'Khalid@2024', name: 'خالد العمر', role: 'الإدارة' }
+];
+
+// ===== STATE =====
+let currentUser = null;
+let customers = [
+  { id: 1, name: 'شادي فايز شحادة علي حسن الدرويش', mother: 'فاطمة', nationalId: '01234567890', birthplace: 'دمشق', birthdate: '1975-03-15', militaryId: 'M001', rank: 'عقيد', jobTitle: 'ضابط', workplace: 'وزارة الداخلية', phone: '0912345678', notes: '' },
+  { id: 2, name: 'عماد محمود الصاري', mother: 'سمر', nationalId: '09876543210', birthplace: 'حمص', birthdate: '1980-07-22', militaryId: 'M002', rank: 'مقدم', jobTitle: 'ضابط', workplace: 'الأمن العام', phone: '0923456789', notes: '' },
+  { id: 3, name: 'وسيم يوسف حميدان ربيع المصري', mother: 'هدى', nationalId: '05432109876', birthplace: 'اللاذقية', birthdate: '1978-11-30', militaryId: 'M003', rank: 'رائد', jobTitle: 'ضابط', workplace: 'الشرطة العسكرية', phone: '0934567890', notes: '' },
+  { id: 4, name: 'فائز أحمد حسين إبراهيم قلوش', mother: 'نادية', nationalId: '07654321098', birthplace: 'حلب', birthdate: '1982-05-10', militaryId: 'M004', rank: 'نقيب', jobTitle: 'ضابط', workplace: 'المديرية العامة', phone: '0945678901', notes: '' },
+];
+let expenses = [];
+let revenues = [];
+let bookings = [];
+let nextId = 10;
+
+let deleteTarget = { type: null, id: null };
+let editMode = false;
+
+// ===== ROOMS =====
+// roomCategory: 'standard' | 'suite' | 'vip'
+// status: 'vacant' | 'occupied'
+// guests: array of guest objects for occupied rooms
+let roomsData = [
+  ...Array.from({length:8}, (_,i) => ({ num: 101+i, status:'vacant', category:'standard', guests:[] })),
+  ...Array.from({length:8}, (_,i) => ({ num: 109+i, status:'vacant', category:'standard', guests:[] })),
+  { num:117, status:'vacant', category:'standard', guests:[] },
+  { num:118, status:'vacant', category:'standard', guests:[] },
+  { num:119, status:'vacant', category:'standard', guests:[] },
+  { num:120, status:'vacant', category:'standard', guests:[] },
+  { num:201, status:'vacant', category:'standard', guests:[] },
+  { num:202, status:'vacant', category:'standard', guests:[] },
+  { num:203, status:'vacant', category:'standard', guests:[] },
+  { num:204, status:'vacant', category:'standard', guests:[] },
+  { num:205, status:'vacant', category:'standard', guests:[] },
+  { num:206, status:'occupied', category:'standard', occupancyType:'full', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'نادي الاتحاد الرياضي', guests:[
+    { id:1, bed:'سرير 1', name:'وسيم يوسف حميدان', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' },
+    { id:2, bed:'سرير 2', name:'ربيع المصري', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' }
+  ]},
+  { num:207, status:'vacant', category:'standard', guests:[] },
+  { num:208, status:'vacant', category:'standard', guests:[] },
+  { num:209, status:'vacant', category:'standard', guests:[] },
+  { num:210, status:'vacant', category:'standard', guests:[] },
+  { num:211, status:'occupied', category:'standard', occupancyType:'single', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'نادي الاتحاد الرياضي', guests:[
+    { id:1, bed:'سرير 1', name:'عماد محمود الصاري', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'مقدم', jobTitle:'ضابط', workplace:'الأمن العام', phone:'0923456789' }
+  ]},
+  { num:212, status:'occupied', category:'standard', occupancyType:'full', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'نادي الاتحاد الرياضي', guests:[
+    { id:1, bed:'سرير 1', name:'شادي فايز شحادة علي حسن الدرويش', mother:'فاطمة', nationalId:'01234567890', birthplace:'دمشق', birthdate:'1975-03-15', militaryId:'M001', rank:'عقيد', jobTitle:'ضابط', workplace:'وزارة الداخلية', phone:'0912345678' },
+    { id:2, bed:'سرير 2', name:'', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' }
+  ]},
+  { num:213, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[
+    { id:1, bed:'سرير 1', name:'فائز أحمد حسين إبراهيم قلوش', mother:'نادية', nationalId:'07654321098', birthplace:'حلب', birthdate:'1982-05-10', militaryId:'M004', rank:'نقيب', jobTitle:'ضابط', workplace:'المديرية العامة', phone:'0945678901' }
+  ]},
+  { num:214, status:'vacant', category:'standard', guests:[] },
+  { num:215, status:'vacant', category:'vip', guests:[] },
+  { num:216, status:'vacant', category:'suite', guests:[] },
+  { num:217, status:'occupied', category:'standard', occupancyType:'full', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[
+    { id:1, bed:'سرير 1', name:'سياف محمد العبد الله', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' },
+    { id:2, bed:'سرير 2', name:'محمد عبد الرحمان جبا', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' }
+  ]},
+  { num:218, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[
+    { id:1, bed:'سرير 1', name:'هادي خالد منون', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' }
+  ]},
+  { num:219, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[
+    { id:1, bed:'سرير 1', name:'أحمد فواز حاتم', mother:'', nationalId:'', birthplace:'', birthdate:'', militaryId:'', rank:'', jobTitle:'', workplace:'', phone:'' }
+  ]},
+  { num:220, status:'vacant', category:'standard', guests:[] },
+  { num:301, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'وسيم محمد حسين',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'عقيد',jobTitle:'',workplace:'',phone:''}]},
+  { num:302, status:'vacant', category:'standard', guests:[] },
+  { num:303, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'عبد الرحمان أحمد الأخر',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'مقدم',jobTitle:'',workplace:'',phone:''}]},
+  { num:304, status:'occupied', category:'standard', occupancyType:'single', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'اسامة محمد أنور الحا',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'رائد',jobTitle:'',workplace:'',phone:''}]},
+  { num:305, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'عادل حسين الجوير',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'نقيب',jobTitle:'',workplace:'',phone:''}]},
+  { num:306, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'إبراهيم اسماعيل العن',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'عقيد',jobTitle:'',workplace:'',phone:''}]},
+  { num:307, status:'vacant', category:'standard', guests:[] },
+  { num:308, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'محسن يوسف ناصر',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'مقدم',jobTitle:'',workplace:'',phone:''}]},
+  { num:309, status:'vacant', category:'standard', guests:[] },
+  { num:310, status:'vacant', category:'standard', guests:[] },
+  { num:311, status:'vacant', category:'standard', guests:[] },
+  { num:312, status:'occupied', category:'standard', occupancyType:'single', paymentType:'عسكري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'عبد المنان محمد صعب العبا',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'رائد',jobTitle:'',workplace:'',phone:''}]},
+  { num:313, status:'occupied', category:'standard', occupancyType:'single', paymentType:'دفع فوري', checkin:'2026-03-01', checkoutType:'open', dailyRate:250, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'مؤيد عماد السحلي',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'',jobTitle:'',workplace:'',phone:''}]},
+  { num:314, status:'vacant', category:'standard', guests:[] },
+  { num:315, status:'occupied', category:'vip', occupancyType:'single', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:300, currency:'ل.س', destination:'', guests:[{id:1,bed:'سرير 1',name:'زاهر حج أحمد زيدان',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'عميد',jobTitle:'',workplace:'',phone:''}]},
+  { num:316, status:'occupied', category:'suite', occupancyType:'full', paymentType:'مطالبة', checkin:'2026-03-01', checkoutType:'open', dailyRate:400, currency:'ل.س', destination:'', guests:[
+    {id:1,bed:'سرير 1',name:'سامر خالد حلق',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'عقيد',jobTitle:'',workplace:'',phone:''},
+    {id:2,bed:'سرير 2',name:'بلال محمد أسبطيلة',mother:'',nationalId:'',birthplace:'',birthdate:'',militaryId:'',rank:'',jobTitle:'',workplace:'',phone:''}
+  ]},
+];
+
+// ===== LOGIN =====
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const account = ACCOUNTS.find(a => a.email === email && a.pass === pass);
+  if (account) {
+    currentUser = account;
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('topbar-user').textContent = account.name;
+    document.getElementById('topbar-avatar').textContent = account.name[0];
+    document.querySelector('.user-role').textContent = account.role;
+    renderRooms();
+    renderCustomers();
+    renderExpenses();
+    renderRevenues();
+    renderBookings();
+  } else {
+    const err = document.getElementById('login-error');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin(); });
+
+function doLogout() {
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ===== THEME =====
+let dark = false;
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
+  document.getElementById('theme-toggle').classList.toggle('active', dark);
+}
+
+// ===== NAVIGATION =====
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event && event.currentTarget && event.currentTarget.classList.add('active');
+  // re-activate nav
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(page)) n.classList.add('active');
+  });
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== ROOMS =====
+function getRoomCardClass(r) {
+  if (r.status === 'occupied') return 'occupied';
+  if (r.category === 'suite') return 'suite';
+  if (r.category === 'vip') return 'vip';
+  return 'vacant';
+}
+
+function renderRooms(filter = 'all') {
+  const grid = document.getElementById('rooms-grid');
+  let filtered = roomsData;
+  if (filter === 'vacant') filtered = roomsData.filter(r => r.status === 'vacant');
+  else if (filter === 'occupied') filtered = roomsData.filter(r => r.status === 'occupied');
+  else if (filter === 'suite') filtered = roomsData.filter(r => r.category === 'suite');
+  else if (filter === 'vip') filtered = roomsData.filter(r => r.category === 'vip');
+
+  // count
+  const vacCount = roomsData.filter(r => r.status === 'vacant').length;
+  const occCount = roomsData.filter(r => r.status === 'occupied').length;
+  const vacEl = document.getElementById('vacant-count');
+  const occEl = document.getElementById('occupied-count');
+  if (vacEl) vacEl.textContent = vacCount;
+  if (occEl) occEl.textContent = occCount;
+
+  grid.innerHTML = filtered.map(r => {
+    const cardClass = getRoomCardClass(r);
+    const badge = r.category === 'suite' ? '<span class="badge-suite">سويت</span>' : r.category === 'vip' ? '<span class="badge-vip">VIP</span>' : '';
+    const statusLabel = r.status === 'occupied' ? 'مشغولة' : 'شاغرة';
+    const guestNames = r.guests.map(g => g.name).filter(Boolean);
+    const guestHtml = guestNames.length ? `<div class="room-guest">${guestNames.slice(0,2).join('<br>')}</div>` : '';
+    return `<div class="room-card ${cardClass}" onclick="openRoomModal(${r.num})" title="الغرفة ${r.num} - انقر للتفاصيل">
+      ${badge}
+      <div class="room-num">${r.num}</div>
+      <div class="room-status">${statusLabel}</div>
+      ${guestHtml}
+    </div>`;
+  }).join('');
+}
+function filterRooms(v) { renderRooms(v); }
+
+// ===== ROOM MODAL =====
+let currentRoomNum = null;
+let guestIdCounter = 100;
+
+function openRoomModal(num) {
+  currentRoomNum = num;
+  const room = roomsData.find(r => r.num === num);
+  if (!room) return;
+  if (room.status === 'occupied') {
+    openOccupiedRoomModal(room);
+  } else {
+    openVacantRoomModal(room);
+  }
+}
+
+/* ---- OCCUPIED ROOM MODAL ---- */
+function openOccupiedRoomModal(room) {
+  const overlay = document.getElementById('room-detail-modal');
+  document.getElementById('rd-room-num').textContent = room.num;
+  const catLabel = room.category === 'suite' ? 'سويت' : room.category === 'vip' ? 'VIP' : 'غرفة عادية';
+  document.getElementById('rd-room-cat').textContent = catLabel;
+
+  // Render guests
+  renderOccupiedGuests(room);
+  // services
+  recalcServices(room);
+
+  overlay.classList.add('active');
+}
+
+function renderOccupiedGuests(room) {
+  const container = document.getElementById('rd-guests-container');
+  container.innerHTML = room.guests.map((g, idx) => {
+    const payBadge = `<span class="pay-badge ${room.paymentType === 'مطالبة' ? 'pay-pending' : room.paymentType === 'عسكري' ? 'pay-military' : 'pay-immediate'}">${room.paymentType}</span>`;
+    const checkoutLabel = room.checkoutType === 'open' ? `خروج مفتوح – ${room.dailyRate} ل.س/يوم` : `خروج ${room.checkout}`;
+    return `<div class="guest-card">
+      <div class="guest-card-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="bed-badge">${g.bed}</span>
+          <span class="guest-card-name">${g.name || '(بدون اسم)'}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-edit" onclick="openEditGuestModal(${room.num}, ${g.id})">✏️ تعديل</button>
+          <button class="btn-evict" onclick="evictGuest(${room.num}, ${g.id})">إخلاء</button>
+        </div>
+      </div>
+      <div class="guest-card-details">
+        <div class="guest-detail-row"><span class="gd-label">النوع</span><span class="gd-val">عسكري</span></div>
+        <div class="guest-detail-row"><span class="gd-label">نوع الدفع</span><span class="gd-val">${payBadge}</span></div>
+        <div class="guest-detail-row"><span class="gd-label">تاريخ الدخول</span><span class="gd-val">${room.checkin || '—'}</span></div>
+        <div class="guest-detail-row"><span class="gd-label">وجهة المطالبة</span><span class="gd-val">${room.destination || '—'}</span></div>
+      </div>
+      <div class="guest-checkout-info">
+        <span class="checkout-open">${checkoutLabel}</span>
+        <span style="color:var(--text-muted);font-size:12px;">${room.destination || ''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function recalcServices(room) {
+  const total = room.guests.length * room.dailyRate;
+  document.getElementById('rd-service-list').innerHTML = `
+    <div class="service-row"><span>إيجار الغرفة – ${room.category === 'vip' ? 'VIP' : room.category === 'suite' ? 'سويت' : 'عسكري'}</span><span>${room.dailyRate} ل.س</span></div>`;
+  document.getElementById('rd-total').textContent = total;
+  document.getElementById('rd-settle-btn').textContent = `تسوية الحساب (${total} ل.س)`;
+}
+
+/* ---- EDIT GUEST (inside occupied room) ---- */
+function openEditGuestModal(roomNum, guestId) {
+  const room = roomsData.find(r => r.num === roomNum);
+  const guest = room.guests.find(g => g.id === guestId);
+  if (!guest) return;
+  currentRoomNum = roomNum;
+
+  document.getElementById('eg-modal-title').textContent = `${guest.bed} - ${guest.name || 'نزيل'}`;
+  document.getElementById('eg-guest-id').value = guestId;
+  document.getElementById('eg-name').value = guest.name || '';
+  document.getElementById('eg-mother').value = guest.mother || '';
+  document.getElementById('eg-national-id').value = guest.nationalId || '';
+  document.getElementById('eg-birthplace').value = guest.birthplace || '';
+  document.getElementById('eg-birthdate').value = guest.birthdate || '';
+  document.getElementById('eg-military-id').value = guest.militaryId || '';
+  document.getElementById('eg-rank').value = guest.rank || '';
+  document.getElementById('eg-job-title').value = guest.jobTitle || '';
+  document.getElementById('eg-workplace').value = guest.workplace || '';
+  document.getElementById('eg-phone').value = guest.phone || '';
+
+  // room-level fields
+  document.getElementById('eg-checkin').value = room.checkin || '';
+  document.getElementById('eg-checkout-type').value = room.checkoutType || 'open';
+  toggleEgCheckout(room.checkoutType);
+  document.getElementById('eg-checkout-date').value = room.checkout || '';
+  document.getElementById('eg-daily-rate').value = room.dailyRate || '';
+
+  document.getElementById('edit-guest-modal').classList.add('active');
+}
+
+function toggleEgCheckout(val) {
+  const dateField = document.getElementById('eg-checkout-date-wrap');
+  if (dateField) dateField.style.display = val === 'fixed' ? 'block' : 'none';
+}
+
+function saveEditGuest() {
+  const room = roomsData.find(r => r.num === currentRoomNum);
+  if (!room) return;
+  const guestId = parseInt(document.getElementById('eg-guest-id').value);
+  const guest = room.guests.find(g => g.id === guestId);
+  if (!guest) return;
+
+  guest.name = document.getElementById('eg-name').value;
+  guest.mother = document.getElementById('eg-mother').value;
+  guest.nationalId = document.getElementById('eg-national-id').value;
+  guest.birthplace = document.getElementById('eg-birthplace').value;
+  guest.birthdate = document.getElementById('eg-birthdate').value;
+  guest.militaryId = document.getElementById('eg-military-id').value;
+  guest.rank = document.getElementById('eg-rank').value;
+  guest.jobTitle = document.getElementById('eg-job-title').value;
+  guest.workplace = document.getElementById('eg-workplace').value;
+  guest.phone = document.getElementById('eg-phone').value;
+
+  room.checkin = document.getElementById('eg-checkin').value;
+  room.checkoutType = document.getElementById('eg-checkout-type').value;
+  room.checkout = document.getElementById('eg-checkout-date').value;
+  room.dailyRate = parseFloat(document.getElementById('eg-daily-rate').value) || 0;
+
+  closeModal('edit-guest-modal');
+  renderOccupiedGuests(room);
+  recalcServices(room);
+  renderRooms();
+  showToast('تم حفظ التعديلات ✓', 'success');
+}
+
+function evictGuest(roomNum, guestId) {
+  const room = roomsData.find(r => r.num === roomNum);
+  if (!room) return;
+  room.guests = room.guests.filter(g => g.id !== guestId);
+  if (room.guests.length === 0) {
+    room.status = 'vacant';
+    closeModal('room-detail-modal');
+    showToast('تم إخلاء الغرفة ✓', 'success');
+  } else {
+    renderOccupiedGuests(room);
+    recalcServices(room);
+    showToast('تم إخلاء النزيل ✓', 'success');
+  }
+  renderRooms();
+}
+
+function settleRoom() {
+  const room = roomsData.find(r => r.num === currentRoomNum);
+  if (!room) return;
+  const total = room.guests.length * room.dailyRate;
+  revenues.push({ id: nextId++, date: new Date().toISOString().split('T')[0], desc: `تسوية حساب غرفة ${room.num}`, amount: total, room: room.num });
+  renderRevenues();
+  room.guests = [];
+  room.status = 'vacant';
+  closeModal('room-detail-modal');
+  renderRooms();
+  showToast(`تمت تسوية ${total} ل.س وتحرير الغرفة ✓`, 'success');
+}
+
+/* ---- VACANT ROOM MODAL ---- */
+function openVacantRoomModal(room) {
+  const overlay = document.getElementById('vacant-room-modal');
+  document.getElementById('vr-room-num').textContent = room.num;
+  const catLabel = room.category === 'suite' ? 'سويت' : room.category === 'vip' ? 'VIP' : 'شاغرة';
+  document.getElementById('vr-room-status').textContent = catLabel;
+
+  // reset form
+  document.getElementById('vr-guest-name').value = '';
+  document.getElementById('vr-type').value = 'military';
+  document.getElementById('vr-occupancy').value = 'full';
+  document.getElementById('vr-stay-type').value = 'fixed';
+  document.getElementById('vr-checkin').value = new Date().toISOString().split('T')[0];
+  document.getElementById('vr-checkout').value = '';
+  document.getElementById('vr-currency').value = 'ل.س - ليرة سورية';
+  document.getElementById('vr-daily-rate').value = room.category === 'suite' ? 400 : room.category === 'vip' ? 300 : 250;
+  document.getElementById('vr-payment-type').value = 'مطالبة';
+  document.getElementById('vr-destination').value = '';
+  document.getElementById('vr-mother').value = '';
+  document.getElementById('vr-national-id').value = '';
+  document.getElementById('vr-birthplace').value = '';
+  document.getElementById('vr-birthdate').value = '';
+  document.getElementById('vr-military-id').value = '';
+  document.getElementById('vr-rank').value = '';
+  document.getElementById('vr-job-title').value = '';
+  document.getElementById('vr-workplace').value = '';
+  document.getElementById('vr-phone').value = '';
+  document.getElementById('vr-notes').value = '';
+
+  setActiveToggle('vr-type-group', 'military');
+  setActiveToggle('vr-occupancy-group', 'full');
+  setActiveToggle('vr-stay-group', 'fixed');
+  setActiveToggle('vr-payment-group', 'مطالبة');
+  updateVrDestinationVisibility('مطالبة');
+
+  overlay.classList.add('active');
+}
+
+function setActiveToggle(groupId, value) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  group.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.value === value);
+  });
+}
+
+function handleToggle(groupId, value, inputId) {
+  setActiveToggle(groupId, value);
+  if (inputId) document.getElementById(inputId).value = value;
+  if (groupId === 'vr-payment-group') updateVrDestinationVisibility(value);
+}
+
+function updateVrDestinationVisibility(payType) {
+  const wrap = document.getElementById('vr-destination-wrap');
+  if (wrap) wrap.style.display = payType === 'مطالبة' ? 'block' : 'none';
+}
+
+function saveVacantRoom() {
+  const room = roomsData.find(r => r.num === currentRoomNum);
+  if (!room) return;
+  const name = document.getElementById('vr-guest-name').value.trim();
+  if (!name) { showToast('يرجى إدخال اسم النزيل', 'error'); return; }
+  const rate = parseFloat(document.getElementById('vr-daily-rate').value) || 250;
+  const checkin = document.getElementById('vr-checkin').value;
+  const payType = document.getElementById('vr-payment-type').value;
+  const stayType = document.getElementById('vr-stay-type').value;
+  const checkout = stayType === 'open' ? null : document.getElementById('vr-checkout').value;
+
+  room.status = 'occupied';
+  room.checkin = checkin;
+  room.checkoutType = stayType;
+  room.checkout = checkout;
+  room.dailyRate = rate;
+  room.paymentType = payType;
+  room.destination = document.getElementById('vr-destination').value;
+  room.guests = [{
+    id: ++guestIdCounter,
+    bed: 'سرير 1',
+    name,
+    mother: document.getElementById('vr-mother').value,
+    nationalId: document.getElementById('vr-national-id').value,
+    birthplace: document.getElementById('vr-birthplace').value,
+    birthdate: document.getElementById('vr-birthdate').value,
+    militaryId: document.getElementById('vr-military-id').value,
+    rank: document.getElementById('vr-rank').value,
+    jobTitle: document.getElementById('vr-job-title').value,
+    workplace: document.getElementById('vr-workplace').value,
+    phone: document.getElementById('vr-phone').value,
+  }];
+
+  closeModal('vacant-room-modal');
+  renderRooms();
+  showToast(`تم تسكين الغرفة ${room.num} ✓`, 'success');
+}
+
+// ===== CUSTOMERS =====
+function renderCustomers(list = customers) {
+  const tb = document.getElementById('customers-table');
+  if (!list.length) {
+    tb.innerHTML = '<tr><td colspan="8"><div class="no-results"><span>🔍</span>لا توجد نتائج</div></td></tr>';
+    return;
+  }
+  tb.innerHTML = list.map((c, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.mother}</td>
+      <td style="font-family:monospace;">${c.nationalId}</td>
+      <td><span style="background:#dbeafe;color:#2563eb;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;">${c.rank || '—'}</span></td>
+      <td>${c.phone || '—'}</td>
+      <td>${c.birthplace}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-edit" onclick="editCustomer(${c.id})">تعديل</button>
+          <button class="btn-delete" onclick="askDelete('customer', ${c.id})">حذف</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function searchCustomers() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = customers.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    c.nationalId.includes(q) ||
+    (c.rank && c.rank.toLowerCase().includes(q)) ||
+    (c.phone && c.phone.includes(q))
+  );
+  renderCustomers(filtered);
+}
+
+function openCustomerModal(reset = true) {
+  if (reset) {
+    editMode = false;
+    document.getElementById('edit-customer-id').value = '';
+    document.getElementById('customer-modal-title').textContent = 'إضافة عميل جديد';
+    ['c-name','c-mother','c-national-id','c-birthplace','c-birthdate','c-military-id','c-rank','c-job-title','c-workplace','c-phone','c-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+  }
+  document.getElementById('customer-modal').classList.add('active');
+}
+
+function editCustomer(id) {
+  const c = customers.find(x => x.id === id);
+  if (!c) return;
+  editMode = true;
+  document.getElementById('edit-customer-id').value = id;
+  document.getElementById('customer-modal-title').textContent = 'تعديل بيانات العميل';
+  document.getElementById('c-name').value = c.name;
+  document.getElementById('c-mother').value = c.mother;
+  document.getElementById('c-national-id').value = c.nationalId;
+  document.getElementById('c-birthplace').value = c.birthplace;
+  document.getElementById('c-birthdate').value = c.birthdate;
+  document.getElementById('c-military-id').value = c.militaryId;
+  document.getElementById('c-rank').value = c.rank;
+  document.getElementById('c-job-title').value = c.jobTitle;
+  document.getElementById('c-workplace').value = c.workplace;
+  document.getElementById('c-phone').value = c.phone;
+  document.getElementById('c-notes').value = c.notes;
+  openCustomerModal(false);
+}
+
+function saveCustomer() {
+  const name = document.getElementById('c-name').value.trim();
+  const mother = document.getElementById('c-mother').value.trim();
+  const nationalId = document.getElementById('c-national-id').value.trim();
+  if (!name || !mother || !nationalId) { showToast('يرجى ملء الحقول المطلوبة', 'error'); return; }
+  const data = {
+    name, mother, nationalId,
+    birthplace: document.getElementById('c-birthplace').value,
+    birthdate: document.getElementById('c-birthdate').value,
+    militaryId: document.getElementById('c-military-id').value,
+    rank: document.getElementById('c-rank').value,
+    jobTitle: document.getElementById('c-job-title').value,
+    workplace: document.getElementById('c-workplace').value,
+    phone: document.getElementById('c-phone').value,
+    notes: document.getElementById('c-notes').value
+  };
+  const editId = document.getElementById('edit-customer-id').value;
+  if (editId) {
+    const idx = customers.findIndex(c => c.id == editId);
+    customers[idx] = { ...customers[idx], ...data };
+    showToast('تم تعديل بيانات العميل بنجاح ✓', 'success');
+  } else {
+    customers.push({ id: nextId++, ...data });
+    showToast('تمت إضافة العميل بنجاح ✓', 'success');
+  }
+  closeModal('customer-modal');
+  renderCustomers();
+}
+
+// ===== EXPENSES =====
+function renderExpenses() {
+  const tb = document.getElementById('expense-table');
+  if (!expenses.length) {
+    tb.innerHTML = '<tr><td colspan="6"><div class="no-results"><span>📋</span>لا توجد مصاريف</div></td></tr>';
+    document.getElementById('total-exp').textContent = '0';
+    return;
+  }
+  tb.innerHTML = expenses.map((e, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${e.date}</td>
+      <td>${e.desc}</td>
+      <td style="color:#ef4444;font-weight:700;">${Number(e.amount).toLocaleString()}</td>
+      <td><span style="background:#fee2e2;color:#ef4444;padding:3px 10px;border-radius:20px;font-size:12px;">${e.category}</span></td>
+      <td><div class="action-btns">
+        <button class="btn-edit" onclick="editExpense(${e.id})">تعديل</button>
+        <button class="btn-delete" onclick="askDelete('expense', ${e.id})">حذف</button>
+      </div></td>
+    </tr>`).join('');
+  document.getElementById('total-exp').textContent = expenses.reduce((s,e) => s+Number(e.amount),0).toLocaleString();
+}
+
+function openExpenseModal(reset=true) {
+  if (reset) {
+    document.getElementById('edit-expense-id').value = '';
+    document.getElementById('expense-modal-title').textContent = 'إضافة مصروف جديد';
+    document.getElementById('e-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('e-amount').value = '';
+    document.getElementById('e-desc').value = '';
+  }
+  document.getElementById('expense-modal').classList.add('active');
+}
+
+function editExpense(id) {
+  const e = expenses.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('edit-expense-id').value = id;
+  document.getElementById('expense-modal-title').textContent = 'تعديل المصروف';
+  document.getElementById('e-date').value = e.date;
+  document.getElementById('e-amount').value = e.amount;
+  document.getElementById('e-desc').value = e.desc;
+  document.getElementById('e-category').value = e.category;
+  openExpenseModal(false);
+}
+
+function saveExpense() {
+  const amount = document.getElementById('e-amount').value;
+  const desc = document.getElementById('e-desc').value.trim();
+  if (!amount || !desc) { showToast('يرجى ملء الحقول المطلوبة', 'error'); return; }
+  const data = { date: document.getElementById('e-date').value, amount, desc, category: document.getElementById('e-category').value };
+  const editId = document.getElementById('edit-expense-id').value;
+  if (editId) { const idx = expenses.findIndex(e => e.id == editId); expenses[idx] = {...expenses[idx], ...data}; showToast('تم تعديل المصروف ✓', 'success'); }
+  else { expenses.push({id: nextId++, ...data}); showToast('تمت إضافة المصروف ✓', 'success'); }
+  closeModal('expense-modal'); renderExpenses();
+}
+
+// ===== REVENUES =====
+function renderRevenues() {
+  const tb = document.getElementById('revenue-table');
+  if (!revenues.length) {
+    tb.innerHTML = '<tr><td colspan="6"><div class="no-results"><span>💰</span>لا توجد إيرادات</div></td></tr>';
+    document.getElementById('total-rev').textContent = '0';
+    return;
+  }
+  tb.innerHTML = revenues.map((r, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${r.date}</td>
+      <td>${r.desc}</td>
+      <td style="color:#059669;font-weight:700;">${Number(r.amount).toLocaleString()}</td>
+      <td>${r.room || '—'}</td>
+      <td><div class="action-btns">
+        <button class="btn-edit" onclick="editRevenue(${r.id})">تعديل</button>
+        <button class="btn-delete" onclick="askDelete('revenue', ${r.id})">حذف</button>
+      </div></td>
+    </tr>`).join('');
+  document.getElementById('total-rev').textContent = revenues.reduce((s,r) => s+Number(r.amount),0).toLocaleString();
+}
+
+function openRevenueModal(reset=true) {
+  if (reset) {
+    document.getElementById('edit-revenue-id').value = '';
+    document.getElementById('revenue-modal-title').textContent = 'إضافة إيراد جديد';
+    document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('r-amount').value = '';
+    document.getElementById('r-desc').value = '';
+    document.getElementById('r-room').value = '';
+  }
+  document.getElementById('revenue-modal').classList.add('active');
+}
+
+function editRevenue(id) {
+  const r = revenues.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('edit-revenue-id').value = id;
+  document.getElementById('revenue-modal-title').textContent = 'تعديل الإيراد';
+  document.getElementById('r-date').value = r.date;
+  document.getElementById('r-amount').value = r.amount;
+  document.getElementById('r-desc').value = r.desc;
+  document.getElementById('r-room').value = r.room;
+  openRevenueModal(false);
+}
+
+function saveRevenue() {
+  const amount = document.getElementById('r-amount').value;
+  const desc = document.getElementById('r-desc').value.trim();
+  if (!amount || !desc) { showToast('يرجى ملء الحقول المطلوبة', 'error'); return; }
+  const data = { date: document.getElementById('r-date').value, amount, desc, room: document.getElementById('r-room').value };
+  const editId = document.getElementById('edit-revenue-id').value;
+  if (editId) { const idx = revenues.findIndex(r => r.id == editId); revenues[idx] = {...revenues[idx], ...data}; showToast('تم تعديل الإيراد ✓', 'success'); }
+  else { revenues.push({id: nextId++, ...data}); showToast('تمت إضافة الإيراد ✓', 'success'); }
+  closeModal('revenue-modal'); renderRevenues();
+}
+
+// ===== BOOKINGS =====
+function renderBookings() {
+  const tb = document.getElementById('bookings-table');
+  if (!bookings.length) {
+    tb.innerHTML = '<tr><td colspan="7"><div class="no-results"><span>🗓️</span>لا توجد حجوزات</div></td></tr>';
+    return;
+  }
+  const statusLabel = { confirmed: 'مؤكد', pending: 'قيد الانتظار', checkin: 'تسجيل وصول', cancelled: 'ملغي' };
+  tb.innerHTML = bookings.map((b, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td><strong>${b.guest}</strong></td>
+      <td>${b.room}</td>
+      <td>${b.checkin}</td>
+      <td>${b.checkout}</td>
+      <td><span class="booking-badge ${b.status}">${statusLabel[b.status]}</span></td>
+      <td><div class="action-btns">
+        <button class="btn-edit" onclick="editBooking(${b.id})">تعديل</button>
+        <button class="btn-delete" onclick="askDelete('booking', ${b.id})">حذف</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function openBookingModal(reset=true) {
+  if (reset) {
+    document.getElementById('edit-booking-id').value = '';
+    document.getElementById('b-guest').value = '';
+    document.getElementById('b-room').value = '';
+    document.getElementById('b-checkin').value = '';
+    document.getElementById('b-checkout').value = '';
+    document.getElementById('b-status').value = 'confirmed';
+  }
+  document.getElementById('booking-modal').classList.add('active');
+}
+
+function editBooking(id) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('edit-booking-id').value = id;
+  document.getElementById('b-guest').value = b.guest;
+  document.getElementById('b-room').value = b.room;
+  document.getElementById('b-checkin').value = b.checkin;
+  document.getElementById('b-checkout').value = b.checkout;
+  document.getElementById('b-status').value = b.status;
+  openBookingModal(false);
+}
+
+function saveBooking() {
+  const guest = document.getElementById('b-guest').value.trim();
+  const room = document.getElementById('b-room').value.trim();
+  if (!guest || !room) { showToast('يرجى ملء الحقول المطلوبة', 'error'); return; }
+  const data = { guest, room, checkin: document.getElementById('b-checkin').value, checkout: document.getElementById('b-checkout').value, status: document.getElementById('b-status').value };
+  const editId = document.getElementById('edit-booking-id').value;
+  if (editId) { const idx = bookings.findIndex(b => b.id == editId); bookings[idx] = {...bookings[idx], ...data}; showToast('تم تعديل الحجز ✓', 'success'); }
+  else { bookings.push({id: nextId++, ...data}); showToast('تمت إضافة الحجز ✓', 'success'); }
+  closeModal('booking-modal'); renderBookings();
+}
+
+// ===== DELETE =====
+function askDelete(type, id) {
+  deleteTarget = { type, id };
+  document.getElementById('confirm-modal').classList.add('active');
+}
+
+function confirmDelete() {
+  const { type, id } = deleteTarget;
+  if (type === 'customer') { customers = customers.filter(c => c.id !== id); renderCustomers(); }
+  else if (type === 'expense') { expenses = expenses.filter(e => e.id !== id); renderExpenses(); }
+  else if (type === 'revenue') { revenues = revenues.filter(r => r.id !== id); renderRevenues(); }
+  else if (type === 'booking') { bookings = bookings.filter(b => b.id !== id); renderBookings(); }
+  closeModal('confirm-modal');
+  showToast('تم الحذف بنجاح', 'success');
+}
+
+// ===== MODALS =====
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
+});
+
+// ===== TOAST =====
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
